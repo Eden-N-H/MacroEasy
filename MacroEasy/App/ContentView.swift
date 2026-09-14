@@ -17,23 +17,26 @@ struct ContentView: View {
         case today, targets, settings
     }
 
+    static let tabBarClearance: CGFloat = 100
+
     private var preferredColorScheme: ColorScheme? {
         (AppearanceMode(rawValue: appearanceModeRaw) ?? .system).colorScheme
     }
 
     var body: some View {
-        Group {
-            switch selectedTab {
-            case .today:
-                DashboardView()
-            case .targets:
-                TargetsView()
-            case .settings:
-                SettingsView()
+        ZStack(alignment: .bottom) {
+            Group {
+                switch selectedTab {
+                case .today:
+                    DashboardView()
+                case .targets:
+                    TargetsView()
+                case .settings:
+                    SettingsView()
+                }
             }
-        }
-        .environmentObject(viewModel)
-        .safeAreaInset(edge: .bottom) {
+            .environmentObject(viewModel)
+
             customTabBar
         }
         .preferredColorScheme(preferredColorScheme)

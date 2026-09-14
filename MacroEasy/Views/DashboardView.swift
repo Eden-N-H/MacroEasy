@@ -44,6 +44,7 @@ struct DashboardView: View {
                     }
                 }
                 .padding()
+                .padding(.bottom, ContentView.tabBarClearance)
             }
             .navigationTitle("Today")
             .onAppear {
