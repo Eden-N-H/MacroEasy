@@ -3,11 +3,10 @@
 //  MacroEasy
 //
 //  Created by Eden Hallett on 14/9/2026.
-//
+
 
 import Foundation
 import Combine
-
 
 final class NutritionViewModel: ObservableObject {
     @Published var dailyProgress: DailyNutritionProgress?
@@ -23,6 +22,7 @@ final class NutritionViewModel: ObservableObject {
     private let calculateDailyNutritionProgressUseCase: CalculateDailyNutritionProgressUseCase
     private let assessMacronutrientAdequacyUseCase: AssessMacronutrientAdequacyUseCase
     private let generateDietaryInsightUseCase: GenerateDietaryInsightUseCase
+    private let calculateNutritionHistoryUseCase: CalculateNutritionHistoryUseCase
 
     init(repository: NutritionRepository = SQLiteNutritionRepository()) {
         self.repository = repository
@@ -31,6 +31,7 @@ final class NutritionViewModel: ObservableObject {
         self.calculateDailyNutritionProgressUseCase = CalculateDailyNutritionProgressUseCase(repository: repository)
         self.assessMacronutrientAdequacyUseCase = AssessMacronutrientAdequacyUseCase()
         self.generateDietaryInsightUseCase = GenerateDietaryInsightUseCase(repository: repository)
+        self.calculateNutritionHistoryUseCase = CalculateNutritionHistoryUseCase(repository: repository)
 
         refreshDashboard()
     }
@@ -95,6 +96,15 @@ final class NutritionViewModel: ObservableObject {
         )
     }
 
+    func deleteMeal(id: Int64) {
+        do {
+            try repository.deleteMealEntry(id: id)
+            refreshDashboard()
+        } catch {
+            errorMessage = "Could not delete this meal."
+        }
+    }
+
     func saveAsTemplate(dishName: String, calories: Double, proteinGrams: Double, carbGrams: Double, fatGrams: Double) {
         let macrosProvided = proteinGrams > 0 || carbGrams > 0 || fatGrams > 0
         let meal = SavedMeal(
@@ -111,15 +121,6 @@ final class NutritionViewModel: ObservableObject {
             savedMeals = try repository.fetchSavedMeals()
         } catch {
             errorMessage = "Could not save this meal for later."
-        }
-    }
-    
-    func deleteMeal(id: Int64) {
-        do {
-            try repository.deleteMealEntry(id: id)
-            refreshDashboard()
-        } catch {
-            errorMessage = "Could not delete this meal."
         }
     }
 
@@ -173,5 +174,11 @@ final class NutritionViewModel: ObservableObject {
             }
             return MacroMealBreakdown(mealType: type, grams: grams)
         }
+    }
+
+    // MARK: - History
+
+    func history(for range: HistoryTimeRange) -> [NutritionHistoryPoint] {
+        (try? calculateNutritionHistoryUseCase.execute(range: range)) ?? []
     }
 }

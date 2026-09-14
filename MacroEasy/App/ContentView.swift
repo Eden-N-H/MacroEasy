@@ -14,7 +14,7 @@ struct ContentView: View {
     @AppStorage("appearanceMode") private var appearanceModeRaw: String = AppearanceMode.system.rawValue
 
     enum Tab {
-        case today, targets, settings
+        case today, targets, history, settings
     }
 
     static let tabBarClearance: CGFloat = 100
@@ -31,6 +31,8 @@ struct ContentView: View {
                     DashboardView()
                 case .targets:
                     TargetsView()
+                case .history:
+                    HistoryView()
                 case .settings:
                     SettingsView()
                 }
@@ -59,10 +61,11 @@ struct ContentView: View {
                 Spacer()
 
                 HStack(spacing: 28) {
+                    tabButton(tab: .history, systemImage: "chart.bar.fill", label: "History")
                     tabButton(tab: .settings, systemImage: "gearshape.fill", label: "Settings")
                 }
             }
-            .padding(.horizontal, 40)
+            .padding(.horizontal, 32)
 
             logButton
         }
