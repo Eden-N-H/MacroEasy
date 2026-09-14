@@ -113,6 +113,15 @@ final class NutritionViewModel: ObservableObject {
             errorMessage = "Could not save this meal for later."
         }
     }
+    
+    func deleteMeal(id: Int64) {
+        do {
+            try repository.deleteMealEntry(id: id)
+            refreshDashboard()
+        } catch {
+            errorMessage = "Could not delete this meal."
+        }
+    }
 
     // MARK: - Targets
 
