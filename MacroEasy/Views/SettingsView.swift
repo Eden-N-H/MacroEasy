@@ -47,27 +47,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Units")
                 } footer: {
-                    Text("Changes how calories are displayed around the app. Targets and meal entry always use calories (kcal) to keep your data consistent.")
-                }
-
-                Section("About") {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text("1.0")
-                            .foregroundColor(.secondary)
-                    }
-                    Text("MacroEasy calculates calories from macros using 4 kcal/g for protein and carbohydrates, and 9 kcal/g for fat.")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .padding(.vertical, 4)
-                }
-
-                Section {
-                    Text("Built with AI assistance (Claude) for implementation. Architecture, domain design, and feature decisions are the developer's own.")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .padding(.vertical, 4)
+                    Text("Changes how calories are displayed and entered around the app. Data is always stored in calories (kcal) for consistency.")
                 }
             }
             .navigationTitle("Settings")
