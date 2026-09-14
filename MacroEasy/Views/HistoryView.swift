@@ -47,6 +47,16 @@ enum HistoryMetric: Identifiable {
 }
 
 struct HistoryView: View {
+    @AppStorage("energyUnit") private var energyUnitRaw: String = EnergyUnit.calories.rawValue
+
+    private var energyUnit: EnergyUnit {
+        EnergyUnit(rawValue: energyUnitRaw) ?? .calories
+    }
+
+    private func label(for metric: HistoryMetric) -> String {
+        metric.isEnergy ? energyUnit.displayName : metric.displayName
+    }
+
     var body: some View {
         NavigationView {
             List(HistoryMetric.all) { metric in
@@ -55,7 +65,7 @@ struct HistoryView: View {
                         Circle()
                             .fill(metric.color)
                             .frame(width: 12, height: 12)
-                        Text(metric.displayName)
+                        Text(label(for: metric))
                     }
                 }
             }
