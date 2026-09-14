@@ -145,7 +145,24 @@ final class NutritionViewModel: ObservableObject {
         return try? assessMacronutrientAdequacyUseCase.execute(macro: macro, progress: progress, goal: goal)
     }
 
-    func entries(for macro: Macronutrient, mealType: MealType) -> [MealEntry] {
-        dailyProgress?.entries.filter { $0.mealType == mealType } ?? []
+    struct MacroMealBreakdown {
+        let mealType: MealType
+        let grams: Double
+    }
+
+    func gramsByMealType(for macro: Macronutrient) -> [MacroMealBreakdown] {
+        guard let entries = dailyProgress?.entries else { return [] }
+        let grouped = Dictionary(grouping: entries, by: \.mealType)
+
+        return MealType.allCases.map { type in
+            let grams = (grouped[type] ?? []).reduce(0.0) { sum, entry in
+                switch macro {
+                case .protein: return sum + entry.proteinGrams
+                case .carbohydrate: return sum + entry.carbGrams
+                case .fat: return sum + entry.fatGrams
+                }
+            }
+            return MacroMealBreakdown(mealType: type, grams: grams)
+        }
     }
 }
