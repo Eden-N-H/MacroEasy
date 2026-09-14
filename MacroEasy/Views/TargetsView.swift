@@ -5,17 +5,21 @@
 //  Created by Eden Hallett on 14/9/2026.
 //
 
-
 import SwiftUI
 
 struct TargetsView: View {
     @EnvironmentObject var viewModel: NutritionViewModel
+    @AppStorage("energyUnit") private var energyUnitRaw: String = EnergyUnit.calories.rawValue
 
     @State private var selectedGoal: NutritionGoal = .maintain
-    @State private var calories: String = ""
+    @State private var energyInput: String = ""
     @State private var proteinGrams: String = ""
     @State private var carbGrams: String = ""
     @State private var fatGrams: String = ""
+
+    private var energyUnit: EnergyUnit {
+        EnergyUnit(rawValue: energyUnitRaw) ?? .calories
+    }
 
     var body: some View {
         NavigationView {
@@ -32,10 +36,10 @@ struct TargetsView: View {
                     }
                 }
 
-                Section("Daily Calories") {
-                    TextField("e.g. 2000", text: $calories)
-                        .keyboardType(.numberPad)
-                        .onChange(of: calories) {
+                Section("Daily \(energyUnit.displayName)") {
+                    TextField(energyFieldPlaceholder, text: $energyInput)
+                        .keyboardType(.decimalPad)
+                        .onChange(of: energyInput) {
                             applySuggestedMacros()
                         }
                 }
@@ -70,6 +74,13 @@ struct TargetsView: View {
         }
     }
 
+    private var energyFieldPlaceholder: String {
+        switch energyUnit {
+        case .calories: return "e.g. 2000"
+        case .kilojoules: return "e.g. 8368"
+        }
+    }
+
     private func macroField(label: String, value: Binding<String>) -> some View {
         HStack {
             Text(label)
@@ -87,14 +98,15 @@ struct TargetsView: View {
             return
         }
         selectedGoal = existing.goal
-        calories = String(Int(existing.calories))
+        energyInput = String(Int(energyUnit.convert(fromKilocalories: existing.calories).rounded()))
         proteinGrams = String(Int(existing.proteinGrams))
         carbGrams = String(Int(existing.carbGrams))
         fatGrams = String(Int(existing.fatGrams))
     }
 
     private func applySuggestedMacros() {
-        guard let calorieValue = Double(calories), calorieValue > 0 else { return }
+        guard let enteredEnergy = Double(energyInput), enteredEnergy > 0 else { return }
+        let calorieValue = energyUnit.toKilocalories(enteredEnergy)
         let suggestion = viewModel.suggestedMacros(for: selectedGoal, calories: calorieValue)
         proteinGrams = String(Int(suggestion.proteinGrams))
         carbGrams = String(Int(suggestion.carbGrams))
@@ -102,13 +114,15 @@ struct TargetsView: View {
     }
 
     private func saveTargets() {
-        guard let calorieValue = Double(calories),
+        guard let enteredEnergy = Double(energyInput),
               let proteinValue = Double(proteinGrams),
               let carbValue = Double(carbGrams),
               let fatValue = Double(fatGrams) else {
             viewModel.errorMessage = "Please fill in all fields with valid numbers."
             return
         }
+
+        let calorieValue = energyUnit.toKilocalories(enteredEnergy)
 
         viewModel.setTargets(
             goal: selectedGoal,
