@@ -4,21 +4,27 @@
 //
 //  Created by Eden Hallett on 14/9/2026.
 //
+//  LogMealView.swift
 
 import SwiftUI
 
 struct LogMealView: View {
     @EnvironmentObject var viewModel: NutritionViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @AppStorage("energyUnit") private var energyUnitRaw: String = EnergyUnit.calories.rawValue
 
     @State private var dishName: String = ""
     @State private var mealType: MealType = .breakfast
-    @State private var calories: String = ""
+    @State private var energyInput: String = ""
     @State private var proteinGrams: String = ""
     @State private var carbGrams: String = ""
     @State private var fatGrams: String = ""
     @State private var showMacroDetails = false
     @State private var saveForLater = false
+
+    private var energyUnit: EnergyUnit {
+        EnergyUnit(rawValue: energyUnitRaw) ?? .calories
+    }
 
     var body: some View {
         NavigationView {
@@ -32,7 +38,7 @@ struct LogMealView: View {
                                 HStack {
                                     Text(meal.dishName)
                                     Spacer()
-                                    Text("\(Int(meal.calories)) cal")
+                                    Text(energyUnit.format(fromKilocalories: meal.calories))
                                         .foregroundColor(.secondary)
                                 }
                             }
@@ -49,8 +55,8 @@ struct LogMealView: View {
                         }
                     }
 
-                    TextField("Calories", text: $calories)
-                        .keyboardType(.numberPad)
+                    TextField(energyFieldPlaceholder, text: $energyInput)
+                        .keyboardType(.decimalPad)
                 }
 
                 Section {
@@ -85,6 +91,13 @@ struct LogMealView: View {
         }
     }
 
+    private var energyFieldPlaceholder: String {
+        switch energyUnit {
+        case .calories: return "Calories (e.g. 500)"
+        case .kilojoules: return "Kilojoules (e.g. 2092)"
+        }
+    }
+
     private func macroField(label: String, value: Binding<String>) -> some View {
         HStack {
             Text(label)
@@ -104,11 +117,12 @@ struct LogMealView: View {
     }
 
     private func submit() {
-        guard let calorieValue = Double(calories) else {
-            viewModel.errorMessage = "Please enter the calories for this meal."
+        guard let enteredEnergy = Double(energyInput) else {
+            viewModel.errorMessage = "Please enter the \(energyUnit.displayName.lowercased()) for this meal."
             return
         }
 
+        let calorieValue = energyUnit.toKilocalories(enteredEnergy)
         let proteinValue = Double(proteinGrams) ?? 0
         let carbValue = Double(carbGrams) ?? 0
         let fatValue = Double(fatGrams) ?? 0

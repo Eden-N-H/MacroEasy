@@ -9,6 +9,11 @@ import SwiftUI
 
 struct DashboardView: View {
     @EnvironmentObject var viewModel: NutritionViewModel
+    @AppStorage("energyUnit") private var energyUnitRaw: String = EnergyUnit.calories.rawValue
+
+    private var energyUnit: EnergyUnit {
+        EnergyUnit(rawValue: energyUnitRaw) ?? .calories
+    }
 
     var body: some View {
         NavigationView {
@@ -161,7 +166,7 @@ struct DashboardView: View {
 
                     Spacer()
 
-                    Text("\(Int(entry.calories)) cal")
+                    Text(energyUnit.format(fromKilocalories: entry.calories))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
 
@@ -199,6 +204,9 @@ private struct CalorieRingView: View {
     let consumed: Double
     let target: Double
 
+    @AppStorage("energyUnit") private var energyUnitRaw: String = EnergyUnit.calories.rawValue
+    private var unit: EnergyUnit { EnergyUnit(rawValue: energyUnitRaw) ?? .calories }
+
     private var fraction: Double {
         guard target > 0 else { return 0 }
         return min(consumed / target, 1.0)
@@ -213,12 +221,12 @@ private struct CalorieRingView: View {
                 .stroke(Color.blue, style: StrokeStyle(lineWidth: 14, lineCap: .round))
                 .rotationEffect(.degrees(-90))
             VStack(spacing: 2) {
-                Text("\(Int(consumed))")
+                Text("\(Int(unit.convert(fromKilocalories: consumed).rounded()))")
                     .font(.system(size: 30, weight: .bold))
-                Text("/ \(Int(target))")
+                Text("/ \(Int(unit.convert(fromKilocalories: target).rounded()))")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
-                Text("Calories")
+                Text(unit.displayName)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

@@ -11,9 +11,14 @@ struct ContentView: View {
     @StateObject private var viewModel = NutritionViewModel()
     @State private var selectedTab: Tab = .today
     @State private var showLogMeal = false
+    @AppStorage("appearanceMode") private var appearanceModeRaw: String = AppearanceMode.system.rawValue
 
     enum Tab {
-        case today, targets
+        case today, targets, settings
+    }
+
+    private var preferredColorScheme: ColorScheme? {
+        (AppearanceMode(rawValue: appearanceModeRaw) ?? .system).colorScheme
     }
 
     var body: some View {
@@ -24,12 +29,15 @@ struct ContentView: View {
                     DashboardView()
                 case .targets:
                     TargetsView()
+                case .settings:
+                    SettingsView()
                 }
             }
             .environmentObject(viewModel)
 
             customTabBar
         }
+        .preferredColorScheme(preferredColorScheme)
         .sheet(isPresented: $showLogMeal, onDismiss: {
             viewModel.refreshDashboard()
         }) {
@@ -39,14 +47,23 @@ struct ContentView: View {
     }
 
     private var customTabBar: some View {
-        HStack {
-            tabButton(tab: .today, systemImage: "house.fill", label: "Today")
-            Spacer()
+        ZStack {
+            HStack {
+                HStack(spacing: 28) {
+                    tabButton(tab: .today, systemImage: "house.fill", label: "Today")
+                    tabButton(tab: .targets, systemImage: "target", label: "Targets")
+                }
+
+                Spacer()
+
+                HStack(spacing: 28) {
+                    tabButton(tab: .settings, systemImage: "gearshape.fill", label: "Settings")
+                }
+            }
+            .padding(.horizontal, 40)
+
             logButton
-            Spacer()
-            tabButton(tab: .targets, systemImage: "target", label: "Targets")
         }
-        .padding(.horizontal, 40)
         .padding(.top, 14)
         .padding(.bottom, 10)
         .background(
