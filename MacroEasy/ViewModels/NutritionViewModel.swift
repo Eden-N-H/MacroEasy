@@ -181,4 +181,5 @@ final class NutritionViewModel: ObservableObject {
     func history(for range: HistoryTimeRange) -> [NutritionHistoryPoint] {
         (try? calculateNutritionHistoryUseCase.execute(range: range)) ?? []
     }
+    
 }

@@ -14,19 +14,11 @@
 			remoteGlobalIDString = 32804CE630538631000302BD;
 			remoteInfo = MacroEasy;
 		};
-		32804D0130538633000302BD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 32804CDF30538631000302BD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 32804CE630538631000302BD;
-			remoteInfo = MacroEasy;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		32804CE730538631000302BD /* MacroEasy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacroEasy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32804CF630538633000302BD /* MacroEasyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacroEasyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		32804D0030538633000302BD /* MacroEasyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacroEasyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -38,11 +30,6 @@
 		32804CF930538633000302BD /* MacroEasyTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = MacroEasyTests;
-			sourceTree = "<group>";
-		};
-		32804D0330538633000302BD /* MacroEasyUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MacroEasyUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -62,13 +49,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		32804CFD30538633000302BD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -77,7 +57,6 @@
 			children = (
 				32804CE930538631000302BD /* MacroEasy */,
 				32804CF930538633000302BD /* MacroEasyTests */,
-				32804D0330538633000302BD /* MacroEasyUITests */,
 				32804CE830538631000302BD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,7 +66,6 @@
 			children = (
 				32804CE730538631000302BD /* MacroEasy.app */,
 				32804CF630538633000302BD /* MacroEasyTests.xctest */,
-				32804D0030538633000302BD /* MacroEasyUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,29 +118,6 @@
 			productReference = 32804CF630538633000302BD /* MacroEasyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		32804CFF30538633000302BD /* MacroEasyUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 32804D1030538633000302BD /* Build configuration list for PBXNativeTarget "MacroEasyUITests" */;
-			buildPhases = (
-				32804CFC30538633000302BD /* Sources */,
-				32804CFD30538633000302BD /* Frameworks */,
-				32804CFE30538633000302BD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				32804D0230538633000302BD /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				32804D0330538633000302BD /* MacroEasyUITests */,
-			);
-			name = MacroEasyUITests;
-			packageProductDependencies = (
-			);
-			productName = MacroEasyUITests;
-			productReference = 32804D0030538633000302BD /* MacroEasyUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -177,10 +132,6 @@
 						CreatedOnToolsVersion = 26.4;
 					};
 					32804CF530538633000302BD = {
-						CreatedOnToolsVersion = 26.4;
-						TestTargetID = 32804CE630538631000302BD;
-					};
-					32804CFF30538633000302BD = {
 						CreatedOnToolsVersion = 26.4;
 						TestTargetID = 32804CE630538631000302BD;
 					};
@@ -202,7 +153,6 @@
 			targets = (
 				32804CE630538631000302BD /* MacroEasy */,
 				32804CF530538633000302BD /* MacroEasyTests */,
-				32804CFF30538633000302BD /* MacroEasyUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -216,13 +166,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		32804CF430538633000302BD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		32804CFE30538633000302BD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -246,13 +189,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		32804CFC30538633000302BD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -260,11 +196,6 @@
 			isa = PBXTargetDependency;
 			target = 32804CE630538631000302BD /* MacroEasy */;
 			targetProxy = 32804CF730538633000302BD /* PBXContainerItemProxy */;
-		};
-		32804D0230538633000302BD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 32804CE630538631000302BD /* MacroEasy */;
-			targetProxy = 32804D0130538633000302BD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -498,46 +429,6 @@
 			};
 			name = Release;
 		};
-		32804D1130538633000302BD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5J96Q69LYF;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.eden.MacroEasyUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = MacroEasy;
-			};
-			name = Debug;
-		};
-		32804D1230538633000302BD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5J96Q69LYF;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.eden.MacroEasyUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = MacroEasy;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -564,15 +455,6 @@
 			buildConfigurations = (
 				32804D0E30538633000302BD /* Debug */,
 				32804D0F30538633000302BD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		32804D1030538633000302BD /* Build configuration list for PBXNativeTarget "MacroEasyUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				32804D1130538633000302BD /* Debug */,
-				32804D1230538633000302BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
