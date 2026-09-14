@@ -23,7 +23,7 @@ Open `MacroEasy.xcodeproj` in Xcode (targets iOS 17+) and run on a simulator or 
 
 ## AI Acknowledgement
 
-I hereby acknowledge that AI was used to assist in writing the code to develop this application. Architecture and domain modelling were driven directly by me.
+I hereby acknowledge that AI was used to assist in writing the code to develop this application. Architecture, domain modelling and design were driven by me.
 
 ## Testing
 
