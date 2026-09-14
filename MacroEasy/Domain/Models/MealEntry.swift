@@ -16,4 +16,5 @@ struct MealEntry: Identifiable, MacronutrientProviding {
     var carbGrams: Double
     var fatGrams: Double
     var calories: Double
+    var macrosProvided: Bool
 }

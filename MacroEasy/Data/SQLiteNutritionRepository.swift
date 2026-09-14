@@ -4,6 +4,7 @@
 //
 //  Created by Eden Hallett on 14/9/2026.
 //
+//  SQLiteNutritionRepository.swift
 
 import Foundation
 import SQLite3
@@ -45,7 +46,8 @@ final class SQLiteNutritionRepository: NutritionRepository {
             proteinGrams REAL NOT NULL,
             carbGrams REAL NOT NULL,
             fatGrams REAL NOT NULL,
-            calories REAL NOT NULL
+            calories REAL NOT NULL,
+            macrosProvided INTEGER NOT NULL DEFAULT 0
         );
         """
 
@@ -56,7 +58,8 @@ final class SQLiteNutritionRepository: NutritionRepository {
             proteinGrams REAL NOT NULL,
             carbGrams REAL NOT NULL,
             fatGrams REAL NOT NULL,
-            calories REAL NOT NULL
+            calories REAL NOT NULL,
+            macrosProvided INTEGER NOT NULL DEFAULT 0
         );
         """
 
@@ -95,8 +98,8 @@ final class SQLiteNutritionRepository: NutritionRepository {
     @discardableResult
     func insertMealEntry(_ entry: MealEntry) throws -> MealEntry {
         let insertStatementString = """
-        INSERT INTO meal_entries (dishName, mealType, loggedAt, proteinGrams, carbGrams, fatGrams, calories)
-        VALUES (?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO meal_entries (dishName, mealType, loggedAt, proteinGrams, carbGrams, fatGrams, calories, macrosProvided)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
         """
         var insertStatement: OpaquePointer? = nil
 
@@ -115,6 +118,7 @@ final class SQLiteNutritionRepository: NutritionRepository {
         sqlite3_bind_double(insertStatement, 5, entry.carbGrams)
         sqlite3_bind_double(insertStatement, 6, entry.fatGrams)
         sqlite3_bind_double(insertStatement, 7, entry.calories)
+        sqlite3_bind_int(insertStatement, 8, entry.macrosProvided ? 1 : 0)
 
         guard sqlite3_step(insertStatement) == SQLITE_DONE else {
             print("Could not insert meal entry.")
@@ -134,7 +138,8 @@ final class SQLiteNutritionRepository: NutritionRepository {
             proteinGrams: entry.proteinGrams,
             carbGrams: entry.carbGrams,
             fatGrams: entry.fatGrams,
-            calories: entry.calories
+            calories: entry.calories,
+            macrosProvided: entry.macrosProvided
         )
     }
 
@@ -149,7 +154,7 @@ final class SQLiteNutritionRepository: NutritionRepository {
 
     func fetchMealEntries(from startDate: Date, to endDate: Date) throws -> [MealEntry] {
         let fetchStatementString = """
-        SELECT id, dishName, mealType, loggedAt, proteinGrams, carbGrams, fatGrams, calories
+        SELECT id, dishName, mealType, loggedAt, proteinGrams, carbGrams, fatGrams, calories, macrosProvided
         FROM meal_entries
         WHERE loggedAt >= ? AND loggedAt < ?
         ORDER BY loggedAt ASC;
@@ -185,7 +190,8 @@ final class SQLiteNutritionRepository: NutritionRepository {
                 proteinGrams: sqlite3_column_double(fetchStatement, 4),
                 carbGrams: sqlite3_column_double(fetchStatement, 5),
                 fatGrams: sqlite3_column_double(fetchStatement, 6),
-                calories: sqlite3_column_double(fetchStatement, 7)
+                calories: sqlite3_column_double(fetchStatement, 7),
+                macrosProvided: sqlite3_column_int(fetchStatement, 8) != 0
             )
             entries.append(entry)
         }
@@ -221,8 +227,8 @@ final class SQLiteNutritionRepository: NutritionRepository {
     @discardableResult
     func saveMealTemplate(_ meal: SavedMeal) throws -> SavedMeal {
         let insertStatementString = """
-        INSERT INTO saved_meals (dishName, proteinGrams, carbGrams, fatGrams, calories)
-        VALUES (?, ?, ?, ?, ?);
+        INSERT INTO saved_meals (dishName, proteinGrams, carbGrams, fatGrams, calories, macrosProvided)
+        VALUES (?, ?, ?, ?, ?, ?);
         """
         var insertStatement: OpaquePointer? = nil
 
@@ -237,6 +243,7 @@ final class SQLiteNutritionRepository: NutritionRepository {
         sqlite3_bind_double(insertStatement, 3, meal.carbGrams)
         sqlite3_bind_double(insertStatement, 4, meal.fatGrams)
         sqlite3_bind_double(insertStatement, 5, meal.calories)
+        sqlite3_bind_int(insertStatement, 6, meal.macrosProvided ? 1 : 0)
 
         guard sqlite3_step(insertStatement) == SQLITE_DONE else {
             print("Could not save meal template.")
@@ -254,13 +261,14 @@ final class SQLiteNutritionRepository: NutritionRepository {
             proteinGrams: meal.proteinGrams,
             carbGrams: meal.carbGrams,
             fatGrams: meal.fatGrams,
-            calories: meal.calories
+            calories: meal.calories,
+            macrosProvided: meal.macrosProvided
         )
     }
 
     func fetchSavedMeals() throws -> [SavedMeal] {
         let fetchStatementString = """
-        SELECT id, dishName, proteinGrams, carbGrams, fatGrams, calories
+        SELECT id, dishName, proteinGrams, carbGrams, fatGrams, calories, macrosProvided
         FROM saved_meals
         ORDER BY dishName ASC;
         """
@@ -283,7 +291,8 @@ final class SQLiteNutritionRepository: NutritionRepository {
                 proteinGrams: sqlite3_column_double(fetchStatement, 2),
                 carbGrams: sqlite3_column_double(fetchStatement, 3),
                 fatGrams: sqlite3_column_double(fetchStatement, 4),
-                calories: sqlite3_column_double(fetchStatement, 5)
+                calories: sqlite3_column_double(fetchStatement, 5),
+                macrosProvided: sqlite3_column_int(fetchStatement, 6) != 0
             )
             meals.append(meal)
         }
