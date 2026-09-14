@@ -44,7 +44,6 @@ struct DashboardView: View {
                     }
                 }
                 .padding()
-                .padding(.bottom, 80) // clears the custom tab bar
             }
             .navigationTitle("Today")
             .onAppear {

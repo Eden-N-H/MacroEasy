@@ -22,19 +22,18 @@ struct ContentView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Group {
-                switch selectedTab {
-                case .today:
-                    DashboardView()
-                case .targets:
-                    TargetsView()
-                case .settings:
-                    SettingsView()
-                }
+        Group {
+            switch selectedTab {
+            case .today:
+                DashboardView()
+            case .targets:
+                TargetsView()
+            case .settings:
+                SettingsView()
             }
-            .environmentObject(viewModel)
-
+        }
+        .environmentObject(viewModel)
+        .safeAreaInset(edge: .bottom) {
             customTabBar
         }
         .preferredColorScheme(preferredColorScheme)
@@ -69,8 +68,8 @@ struct ContentView: View {
         .background(
             Color(.systemBackground)
                 .shadow(color: .black.opacity(0.1), radius: 8, y: -2)
+                .ignoresSafeArea(edges: .bottom)
         )
-        .ignoresSafeArea(edges: .bottom)
     }
 
     private func tabButton(tab: Tab, systemImage: String, label: String) -> some View {
